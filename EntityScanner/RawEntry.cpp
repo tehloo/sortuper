@@ -7,11 +7,19 @@
 //
 
 #include "RawEntry.hpp"
+#include <iostream>
 
-#include <string>
 
-class Entry {
-public:
-    std::string path;
-    std::string name;
-};
+RawEntry::RawEntry(string fullname) {
+    parse_name(fullname);
+}
+
+void RawEntry::parse_name(string fullname) {
+    cout << "parse fullname for " << fullname << endl;
+}
+
+string RawEntry::get_full_path() {
+    string rtn(path);
+    rtn.append(name);
+    return rtn;
+}
