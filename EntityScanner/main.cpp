@@ -11,7 +11,8 @@
 #include "RawEntry.hpp"
 using namespace std;
 
-bool find_files(const char *dir_path );
+bool scan_dirs(const char *dir_path);
+bool find_files(const char *dir_path);
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -19,19 +20,24 @@ int main(int argc, const char * argv[]) {
     
     // confirm path
     string root_path = "/Volumes/tehloo mac HDD/downloads";
+    const char* root_dirs_to_post = "/Volumes/tehloo mac HDD/videos";
     const char* root_path_char = root_path.c_str();
     cout << "root path is " << root_path << endl;
     
+    //  scan paths of directories
+    scan_dirs(root_dirs_to_post);
+
+    //  find files to copy
     find_files(root_path_char);
-    
-    
-    
-    // print out all entities
-    
+
     return 0;
 }
 
-bool find_files(const char *dir_path )
+bool scan_dirs(const char *dir_path) {
+    return false;
+}
+
+bool find_files(const char *dir_path)
 {
     DIR *dir;
     struct dirent *ent;
@@ -51,15 +57,15 @@ bool find_files(const char *dir_path )
                 RawEntry *entry = new RawEntry(dir_path, filename);
                 entry_list[i] = entry;
                 i++;
-            } else
-                cout << " - " << ent->d_name << endl;
+            } //else
+                //cout << " - " << ent->d_name << endl;
         }
-        cout << " total " << i << " entries has made." << endl;
+        cout << " total " << i << " entries has made." << endl << endl << endl;
         
         while (i > 0) {
             i--;
-            cout << entry_list[i]->get_full_path() << endl;
-            free(entry_list[i]);
+            cout << "   " << *(entry_list[i]->get_token_info()) << endl;
+            delete entry_list[i];
         }
     }
 
