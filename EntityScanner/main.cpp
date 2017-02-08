@@ -7,30 +7,75 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <stdlib.h>
 #include <dirent.h>
 #include "RawEntry.hpp"
 using namespace std;
 
 bool scan_dirs(const char *dir_path);
 bool find_files(const char *dir_path);
+bool get_paths(char** root_path, char** target_path);
+
+const char* m_root_dirs_to_post;
+const char* m_target_dir;
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, World!\n";
+    char* root_to_post = NULL;
+    char* target_path = NULL;
+    get_paths(&root_to_post, &target_path);
+//    cout << "get_paths : root_path=" << root_to_post << "/ target_path=" << target_path << endl;
     
     // confirm path
-    string root_path = "/Volumes/tehloo mac HDD/downloads";
-    const char* root_dirs_to_post = "/Volumes/tehloo mac HDD/videos";
-    const char* root_path_char = root_path.c_str();
-    cout << "root path is " << root_path << endl;
+    string default_root_path = "/Volumes/tehloo mac HDD/downloads";
+    string default_post_path = "/Volumes/tehloo mac HDD/videos";
+    m_root_dirs_to_post = root_to_post == NULL ? default_post_path.c_str() : root_to_post;
+    m_target_dir = target_path == NULL ? default_root_path.c_str() : target_path;
+    cout << "root path is " << m_root_dirs_to_post << endl;
+    cout << "target path is " << m_target_dir << endl;
+    
     
     //  scan paths of directories
-    scan_dirs(root_dirs_to_post);
+    scan_dirs(m_root_dirs_to_post);
 
     //  find files to copy
-    find_files(root_path_char);
+    find_files(m_target_dir);
 
     return 0;
+}
+
+bool get_paths(char** root_path, char** target_path) {
+    ifstream file("preference.ini");
+    string str;
+    string path;
+    size_t index = 0;
+    char* p_temp = NULL;
+    while (getline(file, str))
+    {
+        if (index = str.find("root_dirs_to_post") != string::npos)
+        {
+            size_t path_start_at = index + 18;
+            size_t path_end_at = str.length() - 1;
+            size_t path_length = path_end_at - path_start_at;
+            //  TODO: should I add 1 char for null?
+            p_temp = (char*)calloc(path_length, sizeof(char)) ;
+            str.copy(p_temp, path_length, path_start_at);
+            *root_path = p_temp;
+        }
+        else if (index = str.find("target_dir") != string::npos)
+        {
+            size_t path_start_at = index + 11;
+            size_t path_end_at = str.length() - 1;
+            size_t path_length = path_end_at - path_start_at;
+            //  TODO: should I add 1 char for null?
+            *target_path = (char*)calloc(path_length, sizeof(char)) ;
+            str.copy(*target_path, path_length, path_start_at);
+        }
+    }
+
+    return false;
 }
 
 bool scan_dirs(const char *dir_path) {
