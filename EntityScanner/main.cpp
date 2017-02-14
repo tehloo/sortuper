@@ -17,9 +17,6 @@ bool scan_dirs(const char *dir_path);
 bool find_files(const char *dir_path);
 bool get_paths(char** root_path, char** target_path);
 
-const char* m_root_dirs_to_post;
-const char* m_target_dir;
-
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, World!\n";
@@ -31,17 +28,20 @@ int main(int argc, const char * argv[]) {
     // confirm path
     string default_root_path = "/Volumes/tehloo mac HDD/downloads";
     string default_post_path = "/Volumes/tehloo mac HDD/videos";
-    m_root_dirs_to_post = root_to_post == NULL ? default_post_path.c_str() : root_to_post;
-    m_target_dir = target_path == NULL ? default_root_path.c_str() : target_path;
-    cout << "root path is " << m_root_dirs_to_post << endl;
-    cout << "target path is " << m_target_dir << endl;
+    char* abs_post = realpath(root_to_post == NULL ? default_post_path.c_str() : root_to_post, NULL);
+    char* abs_target = realpath(target_path == NULL ? default_root_path.c_str() : target_path, NULL);
+    free(root_to_post); root_to_post = NULL;
+    free(target_path); target_path = NULL;
+
+    cout << "root path is " << abs_post << endl;
+    cout << "target path is " << abs_target << endl;
     
     
     //  scan paths of directories
-    scan_dirs(m_root_dirs_to_post);
+    scan_dirs(abs_post);
 
     //  find files to copy
-    find_files(m_target_dir);
+    find_files(abs_target);
 
     return 0;
 }
@@ -88,6 +88,7 @@ bool find_files(const char *dir_path)
     struct dirent *ent;
     RawEntry* entry_list[100] = {};
     
+    cout << endl << "find_files requested to " << dir_path << endl;
     // make all file for path
     //  if path valid??
     if ((dir = opendir(dir_path)) != NULL)
