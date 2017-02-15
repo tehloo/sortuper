@@ -26,7 +26,7 @@ private:
 public:
     RawEntry();
     RawEntry(string fullname);
-    RawEntry(string path, string name) : path(path), name(name) {RawEntry(); parse_to_tokens();}
+    RawEntry(string path, string name);
     ~RawEntry();
 
     string getName() { return name; }

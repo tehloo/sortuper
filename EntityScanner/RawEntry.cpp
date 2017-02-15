@@ -16,8 +16,12 @@ RawEntry::RawEntry() {
 }
 
 RawEntry::RawEntry(string fullname) {
-    
     parse_name(fullname);
+}
+
+RawEntry::RawEntry(string path, string name) : path(path), name(name) {
+    RawEntry();
+    parse_to_tokens();
 }
 
 RawEntry::~RawEntry() {
@@ -40,10 +44,12 @@ void RawEntry::parse_to_tokens() {
     size_t min_pos = 0;
     
     while (target.size() > min_pos) {
-        int i_sep = 0;
-        min_pos = 0;
+        int i_sep = 0;  //  index for separators
+        min_pos = 0;    //  earliest position between separators
         
         char spt;
+        //  searching separators on target string 1 by 1, them choose earliest one 
+        //  to make it as a token.
         while ((spt = separators[i_sep]) != 0) {
             size_t pos = target.find_first_of(spt);
             if (min_pos == 0 || min_pos > pos) {
@@ -52,14 +58,18 @@ void RawEntry::parse_to_tokens() {
             }
             i_sep++;
         }
-        if (min_pos != target.npos) {
+        //  it is not the end of target string.
+        if (min_pos != string::npos) {
             token[token_size] = new string(target.substr(0, min_pos).c_str());
-             
 //            cout << i_sep << " > " << token[token_size] << " from " << target << endl;
+            
+            //  really??
             if (target.size() <= min_pos) break;
             target = target.substr(min_pos+1);
-            token_size++;
+        } else {
+            token[token_size] = new string(target);
         }
+        token_size++;
     }
 }
 
@@ -69,7 +79,7 @@ string* RawEntry::get_token_info() {
     str << "token size = " << token_size << endl;
     int i = 0;
     while (token[i] != NULL) {
-        str << " " << *(token[i]);
+        str << " " << i << ":\"" << *(token[i]) << "\" ";
         i++;
     }
     str << endl;

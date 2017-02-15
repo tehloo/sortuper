@@ -100,7 +100,8 @@ bool find_entries(const char *dir_path, char *ext, int type)
     {
         //  1. find specific files and let them respawn to custom objects.
         int i = 0;
-        while ((ent = readdir(dir)) != NULL){
+        while ((ent = readdir(dir)) != NULL) {
+            //  if type is specified, other type will be ignored.
             if (type != NULL && ent->d_type != type) {
                 continue;
             }
@@ -108,15 +109,18 @@ bool find_entries(const char *dir_path, char *ext, int type)
             // FIXME: ext is located only on tail.
             if (ext != NULL && filename.find(ext) != string::npos) {
                 cout << " + " << ent->d_type << ":" << ent->d_name << endl;
-                RawEntry *entry = new RawEntry(dir_path, filename);
-                entry_list[i] = entry;
-                i++;
+                entry_list[i++] = new RawEntry(dir_path, filename);
+            } else if (ext == NULL) {
+                //  ext is not given, then add all entries for specified type.
+                cout << " + " << ent->d_type << ":" << ent->d_name << endl;
+                entry_list[i++] = new RawEntry(dir_path, filename);
             } else {
                 cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
             }
         }
         cout << " total " << i << " entries has made." << endl << endl << endl;
         
+        //  IT WILL BE REMOVED. it deletes all entries. only for checking.
         while (i > 0) {
             i--;
             cout << "   " << *(entry_list[i]->get_token_info()) << endl;
