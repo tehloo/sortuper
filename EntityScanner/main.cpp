@@ -13,9 +13,10 @@
 #include "RawEntry.hpp"
 using namespace std;
 
+bool get_paths(char** root_path, char** target_path);
 bool scan_dirs(const char *dir_path);
 bool find_files(const char *dir_path);
-bool get_paths(char** root_path, char** target_path);
+bool find_entries(const char *dir_path, char *ext, int type);
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -79,10 +80,14 @@ bool get_paths(char** root_path, char** target_path) {
 }
 
 bool scan_dirs(const char *dir_path) {
-    return false;
+    return find_entries(dir_path, NULL, DT_DIR);
 }
 
-bool find_files(const char *dir_path)
+bool find_files(const char *dir_path) {
+    return find_entries(dir_path, ".smi", DT_UNKNOWN);
+}
+
+bool find_entries(const char *dir_path, char *ext, int type)
 {
     DIR *dir;
     struct dirent *ent;
@@ -96,15 +101,19 @@ bool find_files(const char *dir_path)
         //  1. find specific files and let them respawn to custom objects.
         int i = 0;
         while ((ent = readdir(dir)) != NULL){
+            if (type != NULL && ent->d_type != type) {
+                continue;
+            }
             string filename(ent->d_name);
             // FIXME: ext is located only on tail.
-            if (filename.find(".smi") != string::npos) {
-                cout << " + " << ent->d_name << endl;
+            if (ext != NULL && filename.find(ext) != string::npos) {
+                cout << " + " << ent->d_type << ":" << ent->d_name << endl;
                 RawEntry *entry = new RawEntry(dir_path, filename);
                 entry_list[i] = entry;
                 i++;
-            } //else
-                //cout << " - " << ent->d_name << endl;
+            } else {
+                cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
+            }
         }
         cout << " total " << i << " entries has made." << endl << endl << endl;
         
