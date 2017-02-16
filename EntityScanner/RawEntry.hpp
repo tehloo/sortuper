@@ -9,6 +9,8 @@
 #ifndef RawEntry_hpp
 #define RawEntry_hpp
 
+#define ENTRY_INVALID -1
+
 #include <string>
 using namespace std;
 
