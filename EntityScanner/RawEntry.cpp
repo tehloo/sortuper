@@ -75,8 +75,8 @@ void RawEntry::parse_to_tokens() {
 
 string* RawEntry::get_token_info() {
     ostringstream str;
-    str << get_full_path() << endl;
-    str << "token size = " << token_size << endl;
+    str << get_full_path();
+    str << " | token size = " << token_size << "|";
     int i = 0;
     while (token[i] != NULL) {
         str << " " << i << ":\"" << *(token[i]) << "\" ";
