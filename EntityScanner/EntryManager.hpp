@@ -14,6 +14,8 @@
 
 using namespace std;
 
+class RawEntry;
+
 class EntryManager {
 private:
     char* m_path;
@@ -31,12 +33,17 @@ private:
     void get_abs_path(char *path);
     void scan_dir();
     void add_entry(string filename);
-    void empty_list();
-    void print_info();
 
 public:
     EntryManager();
+    EntryManager(EntryManager* em);
     EntryManager(char* path, char* ext, int type);
+
+    void set_post(EntryManager* post);
+    RawEntry* get_next_entry();
+    void print_info();
+    //  TODO: it should be on destructor and private
+    void empty_list();
 };
 
 

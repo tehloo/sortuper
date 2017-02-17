@@ -9,23 +9,33 @@
 #include "RawEntry.hpp"
 #include <iostream>
 #include <sstream>
+#include <string.h>
 
+const char RawEntry::separators[10] = {' ', '|', '_', '-', '.', 0,};
 
 RawEntry::RawEntry() {
-    token_size = 0;
+    init_variables();
 }
 
 RawEntry::RawEntry(string fullname) {
+    init_variables();
     parse_name(fullname);
 }
 
 RawEntry::RawEntry(string path, string name) : path(path), name(name) {
-    RawEntry();
+    init_variables();
     parse_to_tokens();
 }
 
 RawEntry::~RawEntry() {
     // cout << "RawEntry for " << this->getName() << " destructed" << endl;
+}
+
+void RawEntry::init_variables()
+{
+    memset(token, 0x00, sizeof(token));
+    token_size = 0;
+    pair = NULL;
 }
 
 void RawEntry::parse_name(string fullname) {
@@ -73,7 +83,8 @@ void RawEntry::parse_to_tokens() {
     }
 }
 
-string* RawEntry::get_token_info() {
+string* RawEntry::get_token_info()
+{
     ostringstream str;
     str << get_full_path();
     str << " | token size = " << token_size << "|";
@@ -82,7 +93,96 @@ string* RawEntry::get_token_info() {
         str << " " << i << ":\"" << *(token[i]) << "\" ";
         i++;
     }
+    if (this->pair != NULL) {
+        str << " -> " << pair->get_full_path();
+    }
     str << endl;
     string* info = new string(str.str());
     return info;
+}
+
+RawEntry* RawEntry::select_post(EntryManager* em)
+{
+    EntryManager* entries = new EntryManager(em);
+    if (pair != NULL) {
+        //  TODO: learn operator overloading.
+        cout << "select_post will reset pair " << pair->name;
+    }
+    pair = NULL;
+
+    RawEntry *entry, *best;
+    int score_board[MAX_ENTRY_SIZE] = {0,};
+    int index = 0;
+    int top_index = 0;
+    while ((entry = entries->get_next_entry()) != NULL)
+    {
+        int score = compare_with(entry);
+        if (score > score_board[top_index])
+        {
+            top_index = index;
+            best = entry;
+        }
+        score_board[index++] = score;
+    }
+    cout << " select_post found best entry " << best->getName() << endl;
+    delete entries;
+
+    pair = best;
+    return best;
+}
+
+void RawEntry::init_token_index()
+{
+    token_index = 0;
+}
+
+string* RawEntry::get_next_token()
+{
+    return token_index == token_size - 1 ? NULL : token[++token_index];
+}
+
+/**
+ * compare_with
+ *
+ * 1.   `
+ */
+int RawEntry::compare_with(RawEntry* entry)
+{
+    int score = 0;
+    cout << " ... compare " << name << " with " << entry->getName() << endl;
+    string *str_a, *str_b;
+    //  1. FIND ONE BY ONE
+    this->init_token_index();
+    entry->init_token_index();
+    while ((str_a = this->get_next_token()) != NULL)
+    {
+        while ((str_b = entry->get_next_token()) != NULL)
+        {
+            if (str_a->compare(*str_b) == 0)
+            {
+                score++;
+            }
+        }
+    }
+    cout << " 1. score = " << score << endl;
+
+    //  2. MIND SEQUENCE
+    int order_score = 2;
+    this->init_token_index();
+    entry->init_token_index();
+    while ((str_a = this->get_next_token()) != NULL)
+    {
+        while ((str_b = entry->get_next_token()) != NULL)
+        {
+            if (str_a->compare(*str_b) == 0)
+            {
+                score += order_score;
+                order_score *= order_score;
+                str_a = this->get_next_token();
+                if (str_a == NULL) break;
+            }
+        }
+    }
+    cout << " 2. score = " << score << endl;
+    return score;
 }

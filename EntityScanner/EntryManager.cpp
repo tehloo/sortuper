@@ -11,6 +11,7 @@
 #include <fstream>
 #include <dirent.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 using namespace std;
@@ -24,6 +25,21 @@ EntryManager::EntryManager() :
             m_head(NULL),
             m_cur(NULL) {};
 
+
+EntryManager::EntryManager(EntryManager* em)
+{
+    m_path = (char*)malloc(sizeof(em->m_path));
+    memcpy(m_path, em->m_path, sizeof(em->m_path));
+    m_filter_ext = (char*)malloc(sizeof(em->m_filter_ext));
+    memcpy(m_filter_ext, em->m_filter_ext, sizeof(em->m_filter_ext));
+    m_filter_type = em->m_filter_type;
+    m_entry_count = em->m_entry_count;
+    m_entry_index = 0;
+    m_head = NULL;
+    m_cur = NULL;
+    memcpy(entry_list, em->entry_list, sizeof(em->entry_list));
+}
+
 EntryManager::EntryManager(char* path, char* ext, int type)
 {
     EntryManager();
@@ -33,9 +49,11 @@ EntryManager::EntryManager(char* path, char* ext, int type)
 
     //  Do we need to make sure every parameter has been set.
     scan_dir();
-    print_info();
-    empty_list();
+    //print_info();
+    //empty_list();
 }
+
+//  TODO: we need free heap all we got
 
 void EntryManager::get_abs_path(char* path)
 {
@@ -63,7 +81,7 @@ void EntryManager::scan_dir()
     //  1. find specific files and let them respawn to custom objects.
     while ((ent = readdir(dir)) != NULL) {
         //  if type is specified, other type will be ignored.
-        if (m_filter_type != NULL && ent->d_type != m_filter_type) {
+        if (m_filter_type != DT_UNKNOWN && ent->d_type != m_filter_type) {
             continue;
         }
         string filename(ent->d_name);
@@ -83,8 +101,7 @@ void EntryManager::scan_dir()
 void EntryManager::print_info()
 {
     cout << " *** ENTRY MANGER for " << m_path << endl;
-    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext)
-         << " | * type " << m_filter_type << endl;
+    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext) << " | * type " << m_filter_type << endl;
     cout << "\t * entry size = " << m_entry_count << endl;
 
     int i = 0;
@@ -101,4 +118,25 @@ void EntryManager::empty_list()
 //        cout << " deleting...  " << *(entry_list[i]->get_token_info()) << endl;
         delete entry_list[i++];
     }
+}
+
+void EntryManager::set_post(EntryManager* post)
+{
+    //  loop for each files to post
+    int i = 0;
+    while (i < m_entry_count) {
+        RawEntry* entry = entry_list[i++];
+        //  select most similar one.
+        //  TODO: it can be addte to member for target specified class.
+        RawEntry* selected = entry->select_post(post);
+        //  new each entry will have their own 'pair'
+    }
+}
+
+RawEntry* EntryManager::get_next_entry()
+{
+    if (m_entry_index == m_entry_count - 1) {
+        return NULL;
+    }
+    return entry_list[++m_entry_index];
 }

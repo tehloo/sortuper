@@ -28,14 +28,21 @@ int main(int argc, const char * argv[]) {
     //  cout << "get_paths : root_path=" << root_to_post << "/ target_path=" << target_path << endl;
     
     //  we will make some managers
-    EntryManager *post_manager = new EntryManager(root_to_post, NULL, DT_DIR);
-    EntryManager *target_manager = new EntryManager(target_path, "smi", DT_UNKNOWN);
+    EntryManager *post = new EntryManager(root_to_post, NULL, DT_DIR);
+    EntryManager *target = new EntryManager(target_path, "smi", DT_UNKNOWN);
     
     free(root_to_post); root_to_post = NULL;
     free(target_path); target_path = NULL;
+
+    target->set_post(post);
+    target->print_info();
+
+    //  TODO: Those need to go to destructor/
+    post->empty_list();
+    target->empty_list();
     
-    delete post_manager;
-    delete target_manager;
+    delete post;
+    delete target;
 
     return 0;
 }

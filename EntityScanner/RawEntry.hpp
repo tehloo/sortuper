@@ -10,17 +10,24 @@
 #define RawEntry_hpp
 
 #define ENTRY_INVALID -1
+#define MAX_TOKEN_COUNT 100
 
 #include <string>
+#include "EntryManager.hpp"
 using namespace std;
+
+class EntryManager;
 
 class RawEntry {
 private:
+    static const char separators[10];
+
     string path;
     string name;
-    string* token[100];
+    string* token[MAX_TOKEN_COUNT];
     int token_size;
-    char separators[10] = {' ', '|', '_', '-', '.', 0,};
+    int token_index;
+    RawEntry* pair;
 
     void parse_name(string fullname);
     void parse_to_tokens();
@@ -34,6 +41,12 @@ public:
     string getName() { return name; }
     string get_full_path();
     string* get_token_info();
+    void init_variables();
+
+    int compare_with(RawEntry* entry);
+    string* get_next_token();
+    void init_token_index();
+    RawEntry* select_post(EntryManager* em);
 };
 
 
