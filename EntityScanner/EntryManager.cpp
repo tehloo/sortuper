@@ -69,7 +69,46 @@ void EntryManager::get_abs_path(char* path)
 
 void EntryManager::add_entry(string filename)
 {
-    entry_list[m_entry_count++] = new RawEntry(m_path, filename);
+    add_entry(m_path, filename);
+}
+
+void EntryManager::add_entry(char* path, string filename)
+{
+    entry_list[m_entry_count++] = new RawEntry(path, filename);
+    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
+}
+
+char* get_file_path(char* path, char* name) {
+    size_t len_path = strlen(path) + strlen(name) + 1;
+    char *curpath = (char*)malloc(len_path * sizeof(char) + 1);
+    memset(curpath, 0x00, len_path * sizeof(char) + 1);
+    return strcat(strcat(strcat(curpath, path), "/"), name);
+}
+
+int EntryManager::get_dirs_in_dir(char* path, char* name) {
+    char* curpath = get_file_path(path, name);
+    DIR* dir = opendir(curpath);
+    if (dir == NULL) {
+        return -1;
+    }
+    add_entry(path, string(name));
+
+    struct dirent *ent;
+    size_t count_dir = 0;
+    while ((ent = readdir(dir)) != NULL) {
+        if (ent->d_type != DT_DIR) {
+            continue;
+        } else if (ent->d_type == DT_DIR
+            && ((strcmp(ent->d_name, ".") == 0
+                 || strcmp(ent->d_name, "..") == 0))) {
+            continue;
+        }
+        size_t cnt = get_dirs_in_dir(curpath, ent->d_name);
+        count_dir++;
+        //  if type is specified, other type will be ignored.
+    }
+//    free path;
+    return count_dir;
 }
 
 void EntryManager::scan_dir() 
@@ -85,6 +124,11 @@ void EntryManager::scan_dir()
 
     //  1. find specific files and let them respawn to custom objects.
     while ((ent = readdir(dir)) != NULL) {
+        if (ent->d_type == DT_DIR
+            && ((strcmp(ent->d_name, ".") == 0
+                 || strcmp(ent->d_name, "..") == 0))) {
+            continue;
+        }
         //  if type is specified, other type will be ignored.
         if (m_filter_type != DT_UNKNOWN && ent->d_type != m_filter_type) {
             continue;
@@ -95,7 +139,13 @@ void EntryManager::scan_dir()
         if (m_filter_ext != NULL && filename.find(m_filter_ext) != string::npos) {
             add_entry(filename);
         } else if (m_filter_ext == NULL) {
-            add_entry(filename);
+            //  every type which is given will be added
+            if (ent->d_type == DT_DIR) {
+                //  BTW, if it is DIR, we will get in to it.
+                get_dirs_in_dir(m_path, ent->d_name);
+            } else {
+                add_entry(filename);
+            }
         } else {
             // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
         }
