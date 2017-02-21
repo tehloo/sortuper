@@ -34,7 +34,7 @@ RawEntry::~RawEntry() {
 void RawEntry::init_variables()
 {
     memset(token, 0x00, sizeof(token));
-    token_size = 0;
+    this->init_token_index();
     pair = NULL;
 }
 
@@ -110,7 +110,9 @@ RawEntry* RawEntry::select_post(EntryManager* em)
     }
     pair = NULL;
 
-    RawEntry *entry, *best;
+    cout << "Entry " << this->name
+         << " is selecting to post " << em->get_path() << endl;
+    RawEntry *entry = NULL, *best = NULL;
     int score_board[MAX_ENTRY_SIZE] = {0,};
     int index = 0;
     int top_index = 0;
@@ -124,16 +126,20 @@ RawEntry* RawEntry::select_post(EntryManager* em)
         }
         score_board[index++] = score;
     }
-    cout << " select_post found best entry " << best->getName() << endl;
+    if (best == NULL) {
+        cout << " No matches at all..." << endl;
+    } else {
+        cout << " select_post found best entry " << best->getName() << endl;
+        pair = best;
+    }
     delete entries;
 
-    pair = best;
     return best;
 }
 
 void RawEntry::init_token_index()
 {
-    token_index = 0;
+    token_index = ENTRY_INVALID;
 }
 
 string* RawEntry::get_next_token()
@@ -153,9 +159,9 @@ int RawEntry::compare_with(RawEntry* entry)
     string *str_a, *str_b;
     //  1. FIND ONE BY ONE
     this->init_token_index();
-    entry->init_token_index();
     while ((str_a = this->get_next_token()) != NULL)
     {
+        entry->init_token_index();
         while ((str_b = entry->get_next_token()) != NULL)
         {
             if (str_a->compare(*str_b) == 0)

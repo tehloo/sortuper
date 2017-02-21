@@ -44,6 +44,7 @@ public:
     void print_info();
     //  TODO: it should be on destructor and private
     void empty_list();
+    char* get_path();
 };
 
 

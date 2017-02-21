@@ -28,10 +28,15 @@ EntryManager::EntryManager() :
 
 EntryManager::EntryManager(EntryManager* em)
 {
-    m_path = (char*)malloc(sizeof(em->m_path));
-    memcpy(m_path, em->m_path, sizeof(em->m_path));
-    m_filter_ext = (char*)malloc(sizeof(em->m_filter_ext));
-    memcpy(m_filter_ext, em->m_filter_ext, sizeof(em->m_filter_ext));
+    if (em->m_path != NULL) {
+        m_path = (char*)malloc(strlen(em->m_path) + 1);
+        memcpy(m_path, em->m_path, strlen(em->m_path) + 1);
+    } else {m_path = NULL;}
+    if (em->m_filter_ext != NULL) {
+        m_filter_ext = (char*)malloc(strlen(em->m_filter_ext) + 1);
+        memcpy(m_filter_ext, em->m_filter_ext, strlen(em->m_filter_ext) + 1);
+    } else {m_filter_ext = NULL;}
+
     m_filter_type = em->m_filter_type;
     m_entry_count = em->m_entry_count;
     m_entry_index = 0;
@@ -110,7 +115,7 @@ void EntryManager::print_info()
     }
 }
 
-void EntryManager::empty_list() 
+void EntryManager::empty_list()
 {
     int i = 0;
     //  IT WILL BE REMOVED. it deletes all entries. only for checking.
@@ -139,4 +144,9 @@ RawEntry* EntryManager::get_next_entry()
         return NULL;
     }
     return entry_list[++m_entry_index];
+}
+
+char* EntryManager::get_path()
+{
+    return m_path;
 }
