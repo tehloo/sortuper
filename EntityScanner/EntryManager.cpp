@@ -54,8 +54,6 @@ EntryManager::EntryManager(char* path, char* ext, int type)
 
     //  Do we need to make sure every parameter has been set.
     scan_dir();
-    //print_info();
-    //empty_list();
 }
 
 //  TODO: we need free heap all we got
@@ -115,9 +113,7 @@ void EntryManager::scan_dir()
 {
     DIR* dir = opendir(m_path);
     struct dirent *ent;
-    cout << endl << "\tfind_files requested to " << m_path << endl;
-    if (dir == NULL)
-    {
+    if (dir == NULL) {
         cout << "dir is not opened" << endl;
         return;
     }
@@ -151,13 +147,15 @@ void EntryManager::scan_dir()
             // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
         }
     }
-    cout << "\t\ttotal " << m_entry_count << " entries has made." << endl << endl << endl;
+    cout << "\t\ttotal " << m_entry_count << " entries has made."
+         << endl << endl << endl;
 }
 
 void EntryManager::print_info()
 {
     cout << " *** ENTRY MANGER for " << m_path << endl;
-    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext) << " | * type " << m_filter_type << endl;
+    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext)
+         << " | * type " << m_filter_type << endl;
     cout << "\t * entry size = " << m_entry_count << endl;
 
     int i = 0;
@@ -171,7 +169,6 @@ void EntryManager::empty_list()
     int i = 0;
     //  IT WILL BE REMOVED. it deletes all entries. only for checking.
     while (i < m_entry_count) {
-//        cout << " deleting...  " << *(entry_list[i]->get_token_info()) << endl;
         delete entry_list[i++];
     }
 }

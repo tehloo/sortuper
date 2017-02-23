@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-const char RawEntry::separators[10] = {' ', '|', '_', '-', '.', '\\', 0,};
+const char RawEntry::separators[10] = {' ', '|', '_', '-', '.', '/', 0,};
 
 RawEntry::RawEntry() {
     init_variables();
@@ -67,11 +67,17 @@ void RawEntry::init_token_list() {
 }
 
 void RawEntry::parse_to_tokens() {
-    cout << "\tparse_to_token " << name << "\n\t";
     this->init_token_list();
 
-    char* idx_back = name;
-    char* idx_fore = name;
+    char* sentance = (char*)calloc(strlen(path) + strlen(name) + 2, sizeof(char));
+    strcpy(sentance, path);
+    strcat(sentance, "/");
+    strcat(sentance, name);
+
+    cout << "\tparse_to_token " << sentance << "\n\t";
+
+    char* idx_back = sentance;
+    char* idx_fore = sentance;
 
     while (1) {
         const char* sep = separators;
@@ -104,11 +110,11 @@ void RawEntry::parse_to_tokens() {
         } while (*(++sep) == 0);
         idx_back = idx_fore;
     }
+    free(sentance);
     cout << endl;
 }
 
-string* RawEntry::get_token_info()
-{
+string* RawEntry::get_token_info() {
     ostringstream str;
     str << name << "\n\t* path=" << path; 
     str << "\n\t* token size = " << token_size << "|";
@@ -125,8 +131,7 @@ string* RawEntry::get_token_info()
     return info;
 }
 
-RawEntry* RawEntry::select_post(EntryManager* em)
-{
+RawEntry* RawEntry::select_post(EntryManager* em) {
     EntryManager* entries = new EntryManager(em);
     if (pair != NULL) {
         //  TODO: learn operator overloading.
@@ -159,26 +164,18 @@ RawEntry* RawEntry::select_post(EntryManager* em)
     return best;
 }
 
-void RawEntry::init_token_index()
-{
+void RawEntry::init_token_index() {
     token_index = ENTRY_INVALID;
 }
 
-string* RawEntry::get_next_token()
-{
+string* RawEntry::get_next_token() {
     return token_index == token_size - 1 ? NULL : token[++token_index];
 }
 
-/**
- * compare_with
- *
- * 1.   `
- */
 
 #define BASE_SCORE_FOR_SEQUENCE 2
 
-int RawEntry::compare_with(RawEntry* entry)
-{
+int RawEntry::compare_with(RawEntry* entry) {
     int score = 0;
     string *str_a, *str_b;
 
@@ -211,7 +208,7 @@ int RawEntry::compare_with(RawEntry* entry)
         cout << " ... compare with " << entry->getName() << endl;
         cout << "\t score = " << score;
         if (order_score > BASE_SCORE_FOR_SEQUENCE)
-            cout << "( +" << order_score << ")";
+            cout << "(+" << order_score << ")";
         cout << endl;
     }
 
