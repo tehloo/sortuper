@@ -1,0 +1,176 @@
+
+
+Hello, SORTUPER!
+
+
+EntryManager updating path ../test/post as /home1/jinchul.kim/work/sortuper/test/post
+
+	find_files requested to /home1/jinchul.kim/work/sortuper/test/post
+	- /home1/jinchul.kim/work/sortuper/test/post/film
+	- /home1/jinchul.kim/work/sortuper/test/post/film/The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+	- /home1/jinchul.kim/work/sortuper/test/post/documentary
+	- /home1/jinchul.kim/work/sortuper/test/post/documentary/1
+	- /home1/jinchul.kim/work/sortuper/test/post/documentary/2
+	- /home1/jinchul.kim/work/sortuper/test/post/documentary/123
+	- /home1/jinchul.kim/work/sortuper/test/post/drama
+	- /home1/jinchul.kim/work/sortuper/test/post/drama/Black Books
+	- /home1/jinchul.kim/work/sortuper/test/post/drama/House of Cards
+	- /home1/jinchul.kim/work/sortuper/test/post/drama/In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+	- /home1/jinchul.kim/work/sortuper/test/post/drama/Game_of_Thrones
+	- /home1/jinchul.kim/work/sortuper/test/post/tvshow
+	- /home1/jinchul.kim/work/sortuper/test/post/tvshow/라디오스타
+	- /home1/jinchul.kim/work/sortuper/test/post/tvshow/마이 리틀 텔레비전
+		total 14 entries has made.
+
+
+
+EntryManager updating path ../test/target/ as /home1/jinchul.kim/work/sortuper/test/target
+
+	find_files requested to /home1/jinchul.kim/work/sortuper/test/target
+	- /home1/jinchul.kim/work/sortuper/test/target/abc def.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/Black Books - 2x05 - Hello Sun.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/Black Books - 1x01 - Cooking the Books.avi.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/Black Books - 2x04 - Blood.avi.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi
+	- /home1/jinchul.kim/work/sortuper/test/target/마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi
+		total 7 entries has made.
+
+
+Entry abc def.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare abc def.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare abc def.smi vs documentary
+ ... compare abc def.smi vs 1
+ ... compare abc def.smi vs 2
+ ... compare abc def.smi vs 123
+ ... compare abc def.smi vs drama
+ ... compare abc def.smi vs Black Books
+ ... compare abc def.smi vs House of Cards
+ ... compare abc def.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+ ... compare abc def.smi vs Game_of_Thrones
+ ... compare abc def.smi vs tvshow
+ ... compare abc def.smi vs 라디오스타
+ ... compare abc def.smi vs 마이 리틀 텔레비전
+ No matches at all...
+Entry 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs documentary
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs 1
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs 2
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs 123
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs drama
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs Black Books
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs House of Cards
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+	 score = 1
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs Game_of_Thrones
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs tvshow
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs 라디오스타
+ ... compare 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi vs 마이 리틀 텔레비전
+	 score = 3
+ select_post found best entry 마이 리틀 텔레비전
+Entry Black Books - 2x05 - Hello Sun.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare Black Books - 2x05 - Hello Sun.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare Black Books - 2x05 - Hello Sun.smi vs documentary
+ ... compare Black Books - 2x05 - Hello Sun.smi vs 1
+ ... compare Black Books - 2x05 - Hello Sun.smi vs 2
+ ... compare Black Books - 2x05 - Hello Sun.smi vs 123
+ ... compare Black Books - 2x05 - Hello Sun.smi vs drama
+ ... compare Black Books - 2x05 - Hello Sun.smi vs Black Books
+	 score = 5( +4)
+ ... compare Black Books - 2x05 - Hello Sun.smi vs House of Cards
+ ... compare Black Books - 2x05 - Hello Sun.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+ ... compare Black Books - 2x05 - Hello Sun.smi vs Game_of_Thrones
+ ... compare Black Books - 2x05 - Hello Sun.smi vs tvshow
+ ... compare Black Books - 2x05 - Hello Sun.smi vs 라디오스타
+ ... compare Black Books - 2x05 - Hello Sun.smi vs 마이 리틀 텔레비전
+ select_post found best entry Black Books
+Entry Black Books - 1x01 - Cooking the Books.avi.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs documentary
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs 1
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs 2
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs 123
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs drama
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs Black Books
+	 score = 5( +4)
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs House of Cards
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs Game_of_Thrones
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs tvshow
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs 라디오스타
+ ... compare Black Books - 1x01 - Cooking the Books.avi.smi vs 마이 리틀 텔레비전
+ select_post found best entry Black Books
+Entry Black Books - 2x04 - Blood.avi.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare Black Books - 2x04 - Blood.avi.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare Black Books - 2x04 - Blood.avi.smi vs documentary
+ ... compare Black Books - 2x04 - Blood.avi.smi vs 1
+ ... compare Black Books - 2x04 - Blood.avi.smi vs 2
+ ... compare Black Books - 2x04 - Blood.avi.smi vs 123
+ ... compare Black Books - 2x04 - Blood.avi.smi vs drama
+ ... compare Black Books - 2x04 - Blood.avi.smi vs Black Books
+	 score = 5( +4)
+ ... compare Black Books - 2x04 - Blood.avi.smi vs House of Cards
+ ... compare Black Books - 2x04 - Blood.avi.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+ ... compare Black Books - 2x04 - Blood.avi.smi vs Game_of_Thrones
+ ... compare Black Books - 2x04 - Blood.avi.smi vs tvshow
+ ... compare Black Books - 2x04 - Blood.avi.smi vs 라디오스타
+ ... compare Black Books - 2x04 - Blood.avi.smi vs 마이 리틀 텔레비전
+ select_post found best entry Black Books
+Entry 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs documentary
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs 1
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs 2
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs 123
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs drama
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs Black Books
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs House of Cards
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+	 score = 1
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs Game_of_Thrones
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs tvshow
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs 라디오스타
+ ... compare 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi vs 마이 리틀 텔레비전
+	 score = 279( +256)
+ select_post found best entry 마이 리틀 텔레비전
+Entry 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi is selecting to post /home1/jinchul.kim/work/sortuper/test/post
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs The.Hobbit.An.Unexpected.Journey.2012.1080p.BRRip.x264.AC3-JYK
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs documentary
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs 1
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs 2
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs 123
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs drama
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs Black Books
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs House of Cards
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs In.The.Flesh.S01.Season.1.1080p.WEB-DL.H264-NTb [PublicHD]
+	 score = 1
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs Game_of_Thrones
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs tvshow
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs 라디오스타
+ ... compare 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi vs 마이 리틀 텔레비전
+	 score = 279( +256)
+ select_post found best entry 마이 리틀 텔레비전
+ *** ENTRY MANGER for /home1/jinchul.kim/work/sortuper/test/target
+	 * ext = smi | * type 0
+	 * entry size = 7
+   1. abc def.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 2| 0:"abc"  1:"def" 
+   2. 160910.마이 리틀 텔레비전.H264.AAC.720p-CineBus.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 8| 0:"160910"  1:"마이"  2:"리틀"  3:"텔레비전"  4:"H264"  5:"AAC"  6:"720p"  7:"CineBus" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/tvshow/마이 리틀 텔레비전
+   3. Black Books - 2x05 - Hello Sun.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 3| 0:"Black"  1:"Books"  2:"- 2x05 - Hello Sun" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/drama/Black Books
+   4. Black Books - 1x01 - Cooking the Books.avi.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 3| 0:"Black"  1:"Books"  2:"- 1x01 - Cooking the Books" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/drama/Black Books
+   5. Black Books - 2x04 - Blood.avi.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 3| 0:"Black"  1:"Books"  2:"- 2x04 - Blood" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/drama/Black Books
+   6. 마이 리틀 텔레비전.E13.150718.HDTV.H264.720p-WITH.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 9| 0:"마이"  1:"리틀"  2:"텔레비전"  3:"E13"  4:"150718"  5:"HDTV"  6:"H264"  7:"720p"  8:"WITH" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/tvshow/마이 리틀 텔레비전
+   7. 마이 리틀 텔레비전.E12.150711.HDTV.H264.720p-WITH.smi | path=/home1/jinchul.kim/work/sortuper/test/target
+	* token size = 9| 0:"마이"  1:"리틀"  2:"텔레비전"  3:"E12"  4:"150711"  5:"HDTV"  6:"H264"  7:"720p"  8:"WITH" 
+	 -> /home1/jinchul.kim/work/sortuper/test/post/tvshow/마이 리틀 텔레비전

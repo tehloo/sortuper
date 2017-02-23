@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F62A6E7E1E2B512F00920E92 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62A6E7D1E2B512F00920E92 /* main.cpp */; };
 		F62A6E861E2B52CB00920E92 /* RawEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62A6E841E2B52CB00920E92 /* RawEntry.cpp */; };
+		F673950B1E5C7EC900D93BAB /* EntryManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F67395091E5C7EC900D93BAB /* EntryManager.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		F62A6E7D1E2B512F00920E92 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F62A6E841E2B52CB00920E92 /* RawEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RawEntry.cpp; sourceTree = "<group>"; };
 		F62A6E851E2B52CB00920E92 /* RawEntry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RawEntry.hpp; sourceTree = "<group>"; };
+		F67395091E5C7EC900D93BAB /* EntryManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntryManager.cpp; sourceTree = "<group>"; };
+		F673950A1E5C7EC900D93BAB /* EntryManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntryManager.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,8 @@
 		F62A6E7C1E2B512F00920E92 /* EntityScanner */ = {
 			isa = PBXGroup;
 			children = (
+				F67395091E5C7EC900D93BAB /* EntryManager.cpp */,
+				F673950A1E5C7EC900D93BAB /* EntryManager.hpp */,
 				F62A6E7D1E2B512F00920E92 /* main.cpp */,
 				F62A6E841E2B52CB00920E92 /* RawEntry.cpp */,
 				F62A6E851E2B52CB00920E92 /* RawEntry.hpp */,
@@ -125,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F62A6E7E1E2B512F00920E92 /* main.cpp in Sources */,
+				F673950B1E5C7EC900D93BAB /* EntryManager.cpp in Sources */,
 				F62A6E861E2B52CB00920E92 /* RawEntry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,6 +258,7 @@
 				F62A6E831E2B512F00920E92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

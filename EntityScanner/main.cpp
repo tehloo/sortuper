@@ -26,6 +26,15 @@ int main(int argc, const char * argv[]) {
     char* target_path = NULL;
     get_paths(&root_to_post, &target_path);
     //  cout << "get_paths : root_path=" << root_to_post << "/ target_path=" << target_path << endl;
+    if (root_to_post == NULL || target_path == NULL) {
+        cout << "Please check preferences..."
+                << " root_to_post = " << (root_to_post == NULL ? "NULL" : root_to_post)
+                << " / target_path = " << (target_path == NULL ? "NULL" : target_path)
+                << endl;
+        if (root_to_post != NULL) free(root_to_post);
+        if (target_path != NULL) free(target_path);
+        return 0;
+    }
     
     //  we will make some managers
     EntryManager *post = new EntryManager(root_to_post, NULL, DT_DIR);
@@ -33,6 +42,9 @@ int main(int argc, const char * argv[]) {
     
     free(root_to_post); root_to_post = NULL;
     free(target_path); target_path = NULL;
+
+    post->print_info();
+    target->print_info();
 
     target->set_post(post);
     target->print_info();

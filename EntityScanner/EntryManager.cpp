@@ -54,8 +54,6 @@ EntryManager::EntryManager(char* path, char* ext, int type)
 
     //  Do we need to make sure every parameter has been set.
     scan_dir();
-    //print_info();
-    //empty_list();
 }
 
 //  TODO: we need free heap all we got
@@ -67,12 +65,12 @@ void EntryManager::get_abs_path(char* path)
     cout << " as " << m_path << endl;
 }
 
-void EntryManager::add_entry(string filename)
+void EntryManager::add_entry(char* filename)
 {
     add_entry(m_path, filename);
 }
 
-void EntryManager::add_entry(char* path, string filename)
+void EntryManager::add_entry(char* path, char* filename)
 {
     entry_list[m_entry_count++] = new RawEntry(path, filename);
     cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
@@ -91,7 +89,7 @@ int EntryManager::get_dirs_in_dir(char* path, char* name) {
     if (dir == NULL) {
         return -1;
     }
-    add_entry(path, string(name));
+    add_entry(path, name);
 
     struct dirent *ent;
     size_t count_dir = 0;
@@ -115,9 +113,7 @@ void EntryManager::scan_dir()
 {
     DIR* dir = opendir(m_path);
     struct dirent *ent;
-    cout << endl << "\tfind_files requested to " << m_path << endl;
-    if (dir == NULL)
-    {
+    if (dir == NULL) {
         cout << "dir is not opened" << endl;
         return;
     }
@@ -136,27 +132,30 @@ void EntryManager::scan_dir()
         string filename(ent->d_name);
         // FIXME: ext is located only on tail.
         // TODO: we'd better to make entry manager for each purpose.
+        // TODO: Do we need to use string for this???
         if (m_filter_ext != NULL && filename.find(m_filter_ext) != string::npos) {
-            add_entry(filename);
+            add_entry(ent->d_name);
         } else if (m_filter_ext == NULL) {
             //  every type which is given will be added
             if (ent->d_type == DT_DIR) {
                 //  BTW, if it is DIR, we will get in to it.
                 get_dirs_in_dir(m_path, ent->d_name);
             } else {
-                add_entry(filename);
+                add_entry(ent->d_name);
             }
         } else {
             // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
         }
     }
-    cout << "\t\ttotal " << m_entry_count << " entries has made." << endl << endl << endl;
+    cout << "\t\ttotal " << m_entry_count << " entries has made."
+         << endl << endl << endl;
 }
 
 void EntryManager::print_info()
 {
     cout << " *** ENTRY MANGER for " << m_path << endl;
-    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext) << " | * type " << m_filter_type << endl;
+    cout << "\t * ext = " << (m_filter_ext == NULL ? "NULL" : m_filter_ext)
+         << " | * type " << m_filter_type << endl;
     cout << "\t * entry size = " << m_entry_count << endl;
 
     int i = 0;
@@ -170,7 +169,6 @@ void EntryManager::empty_list()
     int i = 0;
     //  IT WILL BE REMOVED. it deletes all entries. only for checking.
     while (i < m_entry_count) {
-//        cout << " deleting...  " << *(entry_list[i]->get_token_info()) << endl;
         delete entry_list[i++];
     }
 }

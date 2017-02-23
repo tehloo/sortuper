@@ -32,8 +32,8 @@ private:
 
     void get_abs_path(char *path);
     void scan_dir();
-    void add_entry(string filename);
-    void add_entry(char* path, string filename);
+    void add_entry(char* filename);
+    void add_entry(char* path, char* filename);
     int get_dirs_in_dir(char* path, char* filename);
 
 public:
