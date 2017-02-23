@@ -3,3 +3,4 @@ EntityScanner.xcodeproj
 *.o
 *.log
 sortuper
+EntityScanner/preference.ini
