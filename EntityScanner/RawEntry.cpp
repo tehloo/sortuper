@@ -12,7 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-const char RawEntry::separators[10] = {' ', '|', '_', '-', '.', 0,};
+const char RawEntry::separators[10] = {' ', '|', '_', '-', '.', '\\', 0,};
 
 RawEntry::RawEntry() {
     init_variables();
@@ -35,7 +35,7 @@ RawEntry::~RawEntry() {
 void RawEntry::init_variables() {
     this->path = NULL;
     this->name = NULL;
-    memset(this->token, 0x00, sizeof(token));
+    this->init_token_list();
     this->init_token_index();
     this->pair = NULL;
 }
@@ -61,38 +61,50 @@ string RawEntry::get_full_path() {
     return rtn;
 }
 
+void RawEntry::init_token_list() {
+    this->token_size = 0;
+    memset(this->token, 0x00, sizeof(token));
+}
+
 void RawEntry::parse_to_tokens() {
-    string target = name;
-    size_t min_pos = 0;
-    
-    while (target.size() > min_pos) {
-        int i_sep = 0;  //  index for separators
-        min_pos = 0;    //  earliest position between separators
-        
-        char spt;
-        //  searching separators on target string 1 by 1, them choose earliest one 
-        //  to make it as a token.
-        while ((spt = separators[i_sep]) != 0) {
-            size_t pos = target.find_first_of(spt);
-            if (min_pos == 0 || min_pos > pos) {
-                min_pos = pos;
-//                cout << "  found seperate '" << spt << "' on " << pos << endl;
+    cout << "\tparse_to_token " << name << "\n\t";
+    this->init_token_list();
+
+    char* idx_back = name;
+    char* idx_fore = name;
+
+    while (1) {
+        const char* sep = separators;
+        size_t token_len = 0;
+        //  find serators to make a token.
+        while (*idx_fore != 0 && *idx_fore != *sep) {
+            if (*(sep++) == 0) {
+                idx_fore++;
+                token_len++;
+                sep = separators;
             }
-            i_sep++;
         }
-        //  it is not the end of target string.
-        if (min_pos != string::npos) {
-            token[token_size] = new string(target.substr(0, min_pos).c_str());
-//            cout << i_sep << " > " << token[token_size] << " from " << target << endl;
-            
-            //  really??
-            if (target.size() <= min_pos) break;
-            target = target.substr(min_pos+1);
-        } else {
-            token[token_size] = new string(target);
+        if (token > 0 && idx_back != idx_fore) {
+            token[token_size++] = new string(idx_back, token_len);
+            cout << " #" << token_size << "\"" << *(token[token_size - 1]) << "\"";
         }
-        token_size++;
+
+        //  it's end
+        if (*idx_fore == 0) break;
+        idx_fore++;
+
+        //  skip separators, if it is continued.
+        sep = separators;
+        do {
+            if (*sep == *idx_fore) {
+                idx_fore++;
+                sep = separators;
+                continue;
+            }
+        } while (*(++sep) == 0);
+        idx_back = idx_fore;
     }
+    cout << endl;
 }
 
 string* RawEntry::get_token_info()
@@ -184,8 +196,8 @@ int RawEntry::compare_with(RawEntry* entry)
     //  2. MIND SEQUENCE
     int order_score = BASE_SCORE_FOR_SEQUENCE;
     this->init_token_index();
-    entry->init_token_index();
     while ((str_a = this->get_next_token()) != NULL) {
+        entry->init_token_index();
         while ((str_b = entry->get_next_token()) != NULL) {
             if (str_a->compare(*str_b) == 0) {
                 order_score *= BASE_SCORE_FOR_SEQUENCE;

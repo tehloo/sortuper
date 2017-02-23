@@ -33,6 +33,7 @@ private:
     void parse_to_tokens();
     void init_variables();
     void init_variables(char* path, char* name);
+    void init_token_list();
 
 public:
     RawEntry();
