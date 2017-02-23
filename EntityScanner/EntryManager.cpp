@@ -67,12 +67,12 @@ void EntryManager::get_abs_path(char* path)
     cout << " as " << m_path << endl;
 }
 
-void EntryManager::add_entry(string filename)
+void EntryManager::add_entry(char* filename)
 {
     add_entry(m_path, filename);
 }
 
-void EntryManager::add_entry(char* path, string filename)
+void EntryManager::add_entry(char* path, char* filename)
 {
     entry_list[m_entry_count++] = new RawEntry(path, filename);
     cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
@@ -91,7 +91,7 @@ int EntryManager::get_dirs_in_dir(char* path, char* name) {
     if (dir == NULL) {
         return -1;
     }
-    add_entry(path, string(name));
+    add_entry(path, name);
 
     struct dirent *ent;
     size_t count_dir = 0;
@@ -136,15 +136,16 @@ void EntryManager::scan_dir()
         string filename(ent->d_name);
         // FIXME: ext is located only on tail.
         // TODO: we'd better to make entry manager for each purpose.
+        // TODO: Do we need to use string for this???
         if (m_filter_ext != NULL && filename.find(m_filter_ext) != string::npos) {
-            add_entry(filename);
+            add_entry(ent->d_name);
         } else if (m_filter_ext == NULL) {
             //  every type which is given will be added
             if (ent->d_type == DT_DIR) {
                 //  BTW, if it is DIR, we will get in to it.
                 get_dirs_in_dir(m_path, ent->d_name);
             } else {
-                add_entry(filename);
+                add_entry(ent->d_name);
             }
         } else {
             // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;

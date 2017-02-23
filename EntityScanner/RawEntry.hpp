@@ -22,8 +22,8 @@ class RawEntry {
 private:
     static const char separators[10];
 
-    string path;
-    string name;
+    char* path;
+    char* name;
     string* token[MAX_TOKEN_COUNT];
     int token_size;
     int token_index;
@@ -31,17 +31,18 @@ private:
 
     void parse_name(string fullname);
     void parse_to_tokens();
+    void init_variables();
+    void init_variables(char* path, char* name);
 
 public:
     RawEntry();
     RawEntry(string fullname);
-    RawEntry(string path, string name);
+    RawEntry(char* path, char* name);
     ~RawEntry();
 
     string getName() { return name; }
     string get_full_path();
     string* get_token_info();
-    void init_variables();
 
     int compare_with(RawEntry* entry);
     string* get_next_token();
