@@ -23,9 +23,10 @@ RawEntry::RawEntry(string fullname) {
     parse_name(fullname);
 }
 
-RawEntry::RawEntry(char* path, char* name) {
-    init_variables(path, name);
+RawEntry::RawEntry(char* _path, char* _name) {
+    init_variables(_path, _name);
     parse_to_tokens();
+    cout << "\tentry created " << m_name << endl;;
 }
 
 RawEntry::~RawEntry() {
@@ -33,21 +34,21 @@ RawEntry::~RawEntry() {
 }
 
 void RawEntry::init_variables() {
-    this->path = NULL;
-    this->name = NULL;
+    this->m_path = NULL;
+    this->m_name = NULL;
     this->init_token_list();
     this->init_token_index();
-    this->pair = NULL;
+    //this->pair = NULL;
 }
 
 char* alloc_and_copy(char* str) {
     return strcpy((char*)calloc(strlen(str) + 1, sizeof(char)), str);
 }
 
-void RawEntry::init_variables(char* path, char* name) {
+void RawEntry::init_variables(char* _path, char* _name) {
     this->init_variables();
-    this->path = alloc_and_copy(path);
-    this->name = alloc_and_copy(name);
+    this->m_path = alloc_and_copy(_path);
+    this->m_name = alloc_and_copy(_name);
 }
 
 void RawEntry::parse_name(string fullname) {
@@ -55,9 +56,9 @@ void RawEntry::parse_name(string fullname) {
 }
 
 string RawEntry::get_full_path() {
-    string rtn(path);
+    string rtn(m_path);
     rtn.append("/");
-    rtn.append(name);
+    rtn.append(m_name);
     return rtn;
 }
 
@@ -69,10 +70,10 @@ void RawEntry::init_token_list() {
 void RawEntry::parse_to_tokens() {
     this->init_token_list();
 
-    char* sentance = (char*)calloc(strlen(path) + strlen(name) + 2, sizeof(char));
-    strcpy(sentance, path);
+    char* sentance = (char*)calloc(strlen(m_path) + strlen(m_name) + 2, sizeof(char));
+    strcpy(sentance, m_path);
     strcat(sentance, "/");
-    strcat(sentance, name);
+    strcat(sentance, m_name);
 
     cout << "\tparse_to_token " << sentance << "\n\t";
 
@@ -114,54 +115,16 @@ void RawEntry::parse_to_tokens() {
     cout << endl;
 }
 
-string* RawEntry::get_token_info() {
-    ostringstream str;
-    str << name << "\n\t* path=" << path; 
-    str << "\n\t* token size = " << token_size << "|";
+ostringstream* RawEntry::get_entry_info() {
+    ostringstream* str = new ostringstream();
+    *str << m_name << "\n\t* path=" << this->get_name();
+    *str << "\n\t* token size = " << token_size << "|";
     int i = 0;
     while (token[i] != NULL) {
-        str << " " << i << ":\"" << *(token[i]) << "\" ";
+        *str << " " << i << ":\"" << *(token[i]) << "\" ";
         i++;
     }
-    if (this->pair != NULL) {
-        str << "\n\t -> " << pair->get_full_path();
-    }
-    str << endl;
-    string* info = new string(str.str());
-    return info;
-}
-
-RawEntry* RawEntry::select_post(EntryManager* em) {
-    EntryManager* entries = new EntryManager(em);
-    if (pair != NULL) {
-        //  TODO: learn operator overloading.
-        cout << "select_post will reset pair " << pair->name;
-    }
-    pair = NULL;
-
-    cout << "Entry " << this->name
-         << " is selecting to post " << em->get_path() << endl;
-    RawEntry *entry = NULL, *best = NULL;
-    int score_board[MAX_ENTRY_SIZE] = {0,};
-    int index = 0;
-    int top_index = 0;
-    while ((entry = entries->get_next_entry()) != NULL) {
-        int score = compare_with(entry);
-        if (score > score_board[top_index]) {
-            top_index = index;
-            best = entry;
-        }
-        score_board[index++] = score;
-    }
-    if (best == NULL) {
-        cout << " No matches at all..." << endl;
-    } else {
-        cout << " select_post found best entry " << best->getName() << endl;
-        pair = best;
-    }
-    delete entries;
-
-    return best;
+    return str;
 }
 
 void RawEntry::init_token_index() {
@@ -205,7 +168,7 @@ int RawEntry::compare_with(RawEntry* entry) {
         }
     }
     if (score > 0) {
-        cout << " ... compare with " << entry->getName() << endl;
+        cout << " ... compare with " << entry->get_name() << endl;
         cout << "\t score = " << score;
         if (order_score > BASE_SCORE_FOR_SEQUENCE)
             cout << "(+" << order_score << ")";
@@ -213,4 +176,58 @@ int RawEntry::compare_with(RawEntry* entry) {
     }
 
     return score;
+}
+
+
+
+DirEntry::DirEntry(char* _path, char* _name) : RawEntry(_path, _name) {
+    cout << " DirEntry created " << this->get_name() << endl;
+}
+
+FileEntry::FileEntry(char* _path, char* _name) : RawEntry(_path, _name) {
+    cout << " FileEntry created " << this->get_name() << endl;
+}
+
+DirEntry* FileEntry::select_post(EntryManager* em) {
+    EntryManager* entries = new EntryManager(em);
+    if (this->pair != NULL) {
+        //  TODO: learn operator overloading.
+        cout << "select_post will reset pair " << pair->get_name();
+    }
+    pair = NULL;
+    cout << "Entry " << this->get_name()
+         << " is selecting to post " << em->get_path() << endl;
+    DirEntry *entry = NULL, *best = NULL;
+    int score_board[MAX_ENTRY_SIZE] = {0,};
+    int index = 0;
+    int top_index = 0;
+    while ((entry = (DirEntry*)entries->get_next_entry()) != NULL) {
+        int score = compare_with(entry);
+        if (score > score_board[top_index]) {
+            top_index = index;
+            best = entry;
+        }
+        score_board[index++] = score;
+    }
+    if (best == NULL) {
+        cout << " No matches at all..." << endl;
+    } else {
+        cout << " select_post found best entry " << best->get_name() << endl;
+        pair = best;
+    }
+    delete entries;
+
+    return best;
+}
+
+string FileEntry::get_info() {
+    ostringstream* str = this->get_entry_info();
+    if (this->pair != NULL) {
+        *str << "\n      -> paired with " << pair->get_full_path();
+    }
+    return str->str();
+}
+
+string DirEntry::get_info() {
+    return this->get_entry_info()->str();
 }

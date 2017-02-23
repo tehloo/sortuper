@@ -33,7 +33,8 @@ private:
     void get_abs_path(char *path);
     void scan_dir();
     void add_entry(char* filename);
-    void add_entry(char* path, char* filename);
+    void add_file(char* path, char* name);
+    void add_dir(char* path, char* name);
     int get_dirs_in_dir(char* path, char* filename);
 
 public:

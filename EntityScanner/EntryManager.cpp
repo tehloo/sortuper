@@ -65,14 +65,13 @@ void EntryManager::get_abs_path(char* path)
     cout << " as " << m_path << endl;
 }
 
-void EntryManager::add_entry(char* filename)
-{
-    add_entry(m_path, filename);
+void EntryManager::add_file(char* path, char* filename) {
+    entry_list[m_entry_count++] = new FileEntry(path, filename);
+    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
 }
 
-void EntryManager::add_entry(char* path, char* filename)
-{
-    entry_list[m_entry_count++] = new RawEntry(path, filename);
+void EntryManager::add_dir(char* path, char* name) {
+    entry_list[m_entry_count++] = new DirEntry(path, name);
     cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
 }
 
@@ -89,7 +88,7 @@ int EntryManager::get_dirs_in_dir(char* path, char* name) {
     if (dir == NULL) {
         return -1;
     }
-    add_entry(path, name);
+    add_dir(path, name);
 
     struct dirent *ent;
     size_t count_dir = 0;
@@ -134,14 +133,12 @@ void EntryManager::scan_dir()
         // TODO: we'd better to make entry manager for each purpose.
         // TODO: Do we need to use string for this???
         if (m_filter_ext != NULL && filename.find(m_filter_ext) != string::npos) {
-            add_entry(ent->d_name);
+            add_file(m_path, ent->d_name);
         } else if (m_filter_ext == NULL) {
             //  every type which is given will be added
             if (ent->d_type == DT_DIR) {
                 //  BTW, if it is DIR, we will get in to it.
                 get_dirs_in_dir(m_path, ent->d_name);
-            } else {
-                add_entry(ent->d_name);
             }
         } else {
             // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
@@ -160,7 +157,7 @@ void EntryManager::print_info()
 
     int i = 0;
     while (i < m_entry_count) {
-        cout << "   " << i << ". "  << *(entry_list[i++]->get_token_info());
+        cout << "   " << i << ". "  << entry_list[i++]->get_info() << endl;
     }
 }
 
@@ -178,10 +175,10 @@ void EntryManager::set_post(EntryManager* post)
     //  loop for each files to post
     int i = 0;
     while (i < m_entry_count) {
-        RawEntry* entry = entry_list[i++];
+        FileEntry* entry = (FileEntry*)entry_list[i++];
         //  select most similar one.
         //  TODO: it can be addte to member for target specified class.
-        RawEntry* selected = entry->select_post(post);
+        DirEntry* selected = entry->select_post(post);
         //  new each entry will have their own 'pair'
     }
 }
