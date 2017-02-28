@@ -26,11 +26,11 @@ int main(int argc, const char * argv[]) {
     char* target_path = NULL;
     get_paths(&root_to_post, &target_path);
     //  cout << "get_paths : root_path=" << root_to_post << "/ target_path=" << target_path << endl;
-    if (root_to_post == NULL || target_path == NULL) {
-        cout << "Please check preferences..."
+    cout << "Please check preferences..."
                 << " root_to_post = " << (root_to_post == NULL ? "NULL" : root_to_post)
                 << " / target_path = " << (target_path == NULL ? "NULL" : target_path)
                 << endl;
+    if (root_to_post == NULL || target_path == NULL) {
         if (root_to_post != NULL) free(root_to_post);
         if (target_path != NULL) free(target_path);
         return 0;
@@ -73,7 +73,7 @@ bool get_paths(char** root_path, char** target_path) {
             size_t path_end_at = str.length() - 1;
             size_t path_length = path_end_at - path_start_at;
             //  TODO: should I add 1 char for null?
-            p_temp = (char*)calloc(path_length, sizeof(char)) ;
+            p_temp = (char*)calloc(path_length + 1, sizeof(char)) ;
             str.copy(p_temp, path_length, path_start_at);
             *root_path = p_temp;
         }
@@ -83,7 +83,7 @@ bool get_paths(char** root_path, char** target_path) {
             size_t path_end_at = str.length() - 1;
             size_t path_length = path_end_at - path_start_at;
             //  TODO: should I add 1 char for null?
-            *target_path = (char*)calloc(path_length, sizeof(char)) ;
+            *target_path = (char*)calloc(path_length + 1, sizeof(char)) ;
             str.copy(*target_path, path_length, path_start_at);
         }
     }
