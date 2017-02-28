@@ -30,6 +30,7 @@ private:
     RawEntry* m_cur;
     RawEntry* entry_list[MAX_ENTRY_SIZE];
 
+    void init_variables();
     void get_abs_path(char *path);
     void scan_dir();
     void add_entry(char* filename);

@@ -16,15 +16,9 @@
 
 using namespace std;
 
-EntryManager::EntryManager() : 
-            m_path(NULL),
-            m_filter_ext(NULL),
-            m_filter_type(DT_UNKNOWN),
-            m_entry_count(ENTRY_INVALID),
-            m_entry_index(ENTRY_INVALID),
-            m_head(NULL),
-            m_cur(NULL) {};
-
+EntryManager::EntryManager() {
+    this->init_variables();
+}
 
 EntryManager::EntryManager(EntryManager* em)
 {
@@ -47,6 +41,7 @@ EntryManager::EntryManager(EntryManager* em)
 
 EntryManager::EntryManager(char* path, char* ext, int type)
 {
+    this->init_variables();
     EntryManager();
     m_filter_ext = ext;
     m_filter_type = type;
@@ -54,6 +49,17 @@ EntryManager::EntryManager(char* path, char* ext, int type)
 
     //  Do we need to make sure every parameter has been set.
     scan_dir();
+}
+
+void EntryManager::init_variables() {
+    this->m_path = NULL;
+    this->m_filter_ext = NULL;
+    this->m_filter_type = DT_UNKNOWN;
+    this->m_entry_count = ENTRY_INVALID;
+    this->m_entry_index = ENTRY_INVALID;
+    this->m_head = NULL;
+    this->m_cur = NULL;
+    memset(this->entry_list, 0, sizeof(this->entry_list));
 }
 
 //  TODO: we need free heap all we got
