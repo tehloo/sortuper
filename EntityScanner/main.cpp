@@ -42,10 +42,10 @@ int main(int argc, const char * argv[]) {
     
     free(root_to_post); root_to_post = NULL;
     free(target_path); target_path = NULL;
-
+#ifndef NO_DEBUG
     post->print_info();
     target->print_info();
-
+#endif
     target->set_post(post);
     target->print_info();
 

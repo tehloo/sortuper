@@ -26,7 +26,7 @@ RawEntry::RawEntry(string fullname) {
 RawEntry::RawEntry(char* _path, char* _name) {
     init_variables(_path, _name);
     parse_to_tokens();
-    cout << "\tentry created " << m_name << endl;;
+//    cout << "\tentry created " << m_name << endl;;
 }
 
 RawEntry::~RawEntry() {
@@ -75,7 +75,7 @@ void RawEntry::parse_to_tokens() {
     strcat(sentance, "/");
     strcat(sentance, m_name);
 
-    cout << "\tparse_to_token " << sentance << "\n\t";
+//    cout << "\tparse_to_token " << sentance << "\n\t";
 
     char* idx_back = sentance;
     char* idx_fore = sentance;
@@ -93,7 +93,9 @@ void RawEntry::parse_to_tokens() {
         }
         if (token > 0 && idx_back != idx_fore) {
             token[token_size++] = new string(idx_back, token_len);
+#ifndef NO_DEBUG
             cout << " #" << token_size << "\"" << *(token[token_size - 1]) << "\"";
+#endif
         }
 
         //  it's end
@@ -118,12 +120,14 @@ void RawEntry::parse_to_tokens() {
 ostringstream* RawEntry::get_entry_info() {
     ostringstream* str = new ostringstream();
     *str << m_name << "\n\t* path=" << this->get_name();
+#ifndef NO_DEBUG
     *str << "\n\t* token size = " << token_size << "|";
     int i = 0;
     while (token[i] != NULL) {
         *str << " " << i << ":\"" << *(token[i]) << "\" ";
         i++;
     }
+#endif
     return str;
 }
 
@@ -167,6 +171,7 @@ int RawEntry::compare_with(RawEntry* entry) {
             }
         }
     }
+#ifndef NO_DEBUG
     if (score > 0) {
         cout << " ... compare with " << entry->get_name() << endl;
         cout << "\t score = " << score;
@@ -174,18 +179,18 @@ int RawEntry::compare_with(RawEntry* entry) {
             cout << "(+" << order_score << ")";
         cout << endl;
     }
-
+#endif
     return score;
 }
 
 
 
 DirEntry::DirEntry(char* _path, char* _name) : RawEntry(_path, _name) {
-    cout << " DirEntry created " << this->get_name() << endl;
+//    cout << " DirEntry created " << this->get_name() << endl;
 }
 
 FileEntry::FileEntry(char* _path, char* _name) : RawEntry(_path, _name) {
-    cout << " FileEntry created " << this->get_name() << endl;
+//    cout << " FileEntry created " << this->get_name() << endl;
 }
 
 DirEntry* FileEntry::select_post(EntryManager* em) {
@@ -195,8 +200,10 @@ DirEntry* FileEntry::select_post(EntryManager* em) {
         cout << "select_post will reset pair " << pair->get_name();
     }
     pair = NULL;
+#ifndef NO_DEBUG
     cout << "Entry " << this->get_name()
          << " is selecting to post " << em->get_path() << endl;
+#endif
     DirEntry *entry = NULL, *best = NULL;
     int score_board[MAX_ENTRY_SIZE] = {0,};
     int index = 0;
@@ -209,12 +216,14 @@ DirEntry* FileEntry::select_post(EntryManager* em) {
         }
         score_board[index++] = score;
     }
+#ifndef NO_DEBUG
     if (best == NULL) {
         cout << " No matches at all..." << endl;
     } else {
         cout << " select_post found best entry " << best->get_name() << endl;
-        pair = best;
     }
+#endif
+    pair = best;
     delete entries;
 
     return best;

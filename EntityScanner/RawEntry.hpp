@@ -11,6 +11,7 @@
 
 #define ENTRY_INVALID -1
 #define MAX_TOKEN_COUNT 100
+#define NO_DEBUG
 
 #include <string>
 #include <sstream>
