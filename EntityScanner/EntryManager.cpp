@@ -42,7 +42,6 @@ EntryManager::EntryManager(EntryManager* em)
 EntryManager::EntryManager(char* path, char* ext, int type)
 {
     this->init_variables();
-    EntryManager();
     m_filter_ext = ext;
     m_filter_type = type;
     get_abs_path(path);
@@ -66,19 +65,19 @@ void EntryManager::init_variables() {
 
 void EntryManager::get_abs_path(char* path)
 {
-    cout << endl << "EntryManager updating path " << path;
+    cout << endl << "\tEntryManager updating path " << path;
     m_path = realpath(path, NULL);
     cout << " as " << m_path << endl;
 }
 
 void EntryManager::add_file(char* path, char* filename) {
     entry_list[m_entry_count++] = new FileEntry(path, filename);
-    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
+//    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
 }
 
 void EntryManager::add_dir(char* path, char* name) {
     entry_list[m_entry_count++] = new DirEntry(path, name);
-    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
+//    cout << "\t- " << entry_list[m_entry_count - 1]->get_full_path() << endl;
 }
 
 char* get_file_path(char* path, char* name) {
@@ -128,6 +127,11 @@ void EntryManager::scan_dir()
         if (ent->d_type == DT_DIR
             && ((strcmp(ent->d_name, ".") == 0
                  || strcmp(ent->d_name, "..") == 0))) {
+            continue;
+        }
+        //  skip hidden files
+        if (ent->d_name[0] == '.') {
+            cout << "\t\tskip hidden file or dir - " << ent->d_name << endl;
             continue;
         }
         //  if type is specified, other type will be ignored.

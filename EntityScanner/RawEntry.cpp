@@ -114,7 +114,6 @@ void RawEntry::parse_to_tokens() {
         idx_back = idx_fore;
     }
     free(sentance);
-    cout << endl;
 }
 
 ostringstream* RawEntry::get_entry_info() {
