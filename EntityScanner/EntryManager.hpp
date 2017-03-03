@@ -31,8 +31,8 @@ private:
     RawEntry* entry_list[MAX_ENTRY_SIZE];
 
     void init_variables();
-    void get_abs_path(char *path);
-    void scan_dir();
+    void get_abs_path(char* path);
+    void scan_dir(char* path, char* name);
     void add_entry(char* filename);
     void add_file(char* path, char* name);
     void add_dir(char* path, char* name);
