@@ -36,9 +36,12 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
+    //  filter needed...
+    EntryFilter* filter_post = new EntryFilter(DT_DIR, NULL);
+    EntryFilter* filter_target = new EntryFilter(DT_UNKNOWN, "mkv|avi|mp3|mp4");
     //  we will make some managers
-    EntryManager *post = new EntryManager(root_to_post, NULL, DT_DIR);
-    EntryManager *target = new EntryManager(target_path, "smi", DT_UNKNOWN);
+    EntryManager* post = new EntryManager(root_to_post, filter_post);
+    EntryManager* target = new EntryManager(target_path, filter_target);
     
     free(root_to_post); root_to_post = NULL;
     free(target_path); target_path = NULL;
@@ -55,6 +58,8 @@ int main(int argc, const char * argv[]) {
     
     delete post;
     delete target;
+    delete filter_post;
+    delete filter_target;
 
     return 0;
 }

@@ -11,7 +11,7 @@
 
 #define ENTRY_INVALID -1
 #define MAX_TOKEN_COUNT 100
-#define NO_DEBUG
+//#define NO_DEBUG
 
 #include <string>
 #include <sstream>
@@ -54,6 +54,9 @@ public:
     void init_token_index();
     RawEntry* select_post(EntryManager* em);
     virtual string get_info() = 0;
+    bool set_token_index(int index);
+    int get_token_index() { return token_index; }
+    void strip_common_tokens(RawEntry* entry1, RawEntry* entry2);
 };
 
 

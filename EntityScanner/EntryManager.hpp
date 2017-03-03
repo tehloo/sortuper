@@ -11,10 +11,12 @@
 #define MAX_ENTRY_SIZE 100
 
 #include "RawEntry.hpp"
+#include <vector>
 
 using namespace std;
 
 class RawEntry;
+class EntryFilter;
 
 class EntryManager {
 private:
@@ -22,6 +24,7 @@ private:
 
     char* m_filter_ext;
     int m_filter_type;
+    EntryFilter* m_filter;
 
     int m_entry_count;
     int m_entry_index;
@@ -41,7 +44,8 @@ private:
 public:
     EntryManager();
     EntryManager(EntryManager* em);
-    EntryManager(char* path, char* ext, int type);
+//    EntryManager(char* path, char* ext, int type);
+    EntryManager(char* path, EntryFilter* filter);
 
     void set_post(EntryManager* post);
     RawEntry* get_next_entry();
@@ -51,5 +55,14 @@ public:
     char* get_path();
 };
 
-
+class EntryFilter {
+private:
+    int m_type;
+    vector<char*>* m_ext_list;
+    vector<char*>* parse_exts_to_vector(char* _exts);
+public:
+    EntryFilter(int _type, char* _exts);
+    int get_type();
+    bool match_ext(char* name);
+};
 #endif

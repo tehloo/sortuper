@@ -39,19 +39,16 @@ EntryManager::EntryManager(EntryManager* em)
     memcpy(entry_list, em->entry_list, sizeof(em->entry_list));
 }
 
-EntryManager::EntryManager(char* path, char* ext, int type)
-{
+EntryManager::EntryManager(char* path, EntryFilter* filter) {
     this->init_variables();
-    m_filter_ext = ext;
-    m_filter_type = type;
-    get_abs_path(path);
-
-    //  Do we need to make sure every parameter has been set.
-    scan_dir(m_path, NULL);
+    this->m_filter = filter;
+    this->get_abs_path(path);
+    this->scan_dir(m_path, NULL);
 }
 
 void EntryManager::init_variables() {
     this->m_path = NULL;
+    this->m_filter = NULL;
     this->m_filter_ext = NULL;
     this->m_filter_type = DT_UNKNOWN;
     this->m_entry_count = ENTRY_INVALID;
@@ -115,20 +112,13 @@ void EntryManager::scan_dir(char* path, char* name) {
         if (m_filter_type != DT_UNKNOWN && ent->d_type != m_filter_type) {
             continue;
         }
-        string filename(ent->d_name);
         // FIXME: ext is located only on tail.
         // TODO: we'd better to make entry manager for each purpose.
         // TODO: Do we need to use string for this???
-        if (m_filter_ext != NULL && filename.find(m_filter_ext) != string::npos) {
+        if (this->m_filter->match_ext(ent->d_name)) {
             add_file(curpath, ent->d_name);
-        } else if (m_filter_ext == NULL) {
-            //  every type which is given will be added
-            if (ent->d_type == DT_DIR) {
-                //  BTW, if it is DIR, we will get in to it.
-                scan_dir(curpath, ent->d_name);
-            }
-        } else {
-            // cout << " - " << (int)ent->d_type << ":" << ent->d_name << endl;
+        } else if (this->m_filter->get_type() == DT_DIR && ent->d_type == DT_DIR) {
+            scan_dir(curpath, ent->d_name);
         }
     }
     cout << "\t\ttotal " << m_entry_count << " entries has made."
@@ -181,4 +171,76 @@ RawEntry* EntryManager::get_next_entry()
 char* EntryManager::get_path()
 {
     return m_path;
+}
+
+
+
+EntryFilter::EntryFilter(int _type, char* _exts) {
+    this->m_type = _type;
+    this->m_ext_list = this->parse_exts_to_vector(_exts);
+}
+
+vector<char*>* EntryFilter::parse_exts_to_vector(char* _exts) {
+    if (_exts == NULL) return NULL;
+    vector<char*>* v = new vector<char*>;
+
+    int i_fore = 0;
+    int i_back = 0;
+    int num_exts = 0;
+
+    while (_exts[i_fore] != 0) {
+        while (_exts[i_back] != '|' && _exts[i_back] != 0) {
+            i_back++;
+        }
+
+        int len = i_back - i_fore;
+        if (len > 0) {
+            char* ext = (char*)calloc(len + 1, sizeof(char));
+            strncpy(ext, (_exts + i_fore), len);
+            v->push_back(ext);
+            if (_exts[i_back] == 0) break;
+            i_fore = ++i_back;
+        }
+    }
+#ifndef NO_DEBUG
+    cout << v->size() << " exts has been updated...";
+    vector<char*>::iterator it = v->begin();
+    while (it != v->end()) {
+        cout << " " << *it;
+        it++;
+    }
+    cout << endl;
+#endif
+    return v;
+}
+
+int EntryFilter::get_type() {
+    return this->m_type;
+}
+
+char* get_ext_ptr(char* name) {
+    char* ptr = name;
+    char* ext = NULL;
+
+    while (*ptr != 0) {
+        if (*ptr == '.' && *(ptr+1) != 0) {
+            ext = ptr + 1;
+        }
+        ptr++;
+    }
+    return ext;
+}
+
+bool EntryFilter::match_ext(char* name) {
+    vector<char*>* v = this->m_ext_list;
+    if (v == NULL) return false;
+    char* ext_name = get_ext_ptr(name);
+    if (ext_name == NULL) return false;
+//    for (vector<char*>::iterator it = v->begin(); it != v->end(); it++) {
+ //       char* ext = *(it);
+    for(int i = 0; i < v->size(); i++) {
+        char* ext = (*v)[i];
+        if (strcmp(ext_name, ext) == 0) return true;
+    }
+    return false;
 }

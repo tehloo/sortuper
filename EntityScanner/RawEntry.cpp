@@ -134,48 +134,105 @@ void RawEntry::init_token_index() {
     token_index = ENTRY_INVALID;
 }
 
+bool RawEntry::set_token_index(int index) {
+    if (this->token_size <= index) return false;
+    this->token_index = index;
+}
+
+void RawEntry::strip_common_tokens(RawEntry* entry1, RawEntry* entry2) {
+    entry1->init_token_index();
+    entry2->init_token_index();
+
+    string* token1 = NULL;
+    string* token2 = NULL;
+    while ((token1 = entry1->get_next_token()) != NULL
+           && (token2 = entry2->get_next_token()) != NULL) {
+        if (token1->compare(*token2) != 0)
+            break;
+    }
+}
+
 string* RawEntry::get_next_token() {
     return token_index == token_size - 1 ? NULL : token[++token_index];
 }
 
+int get_similar_score(const char* str1, const char* str2) {
+    int score = 0;
+    while (*str1 != 0) {
+        while (*str2 != 0) {
+            if (*str1 == *str2) {
+                score++;
+                str1++;
+            }
+            if (*str1 == 0)
+                return score;
+            str2++;
+        }
+        str1++;
+    }
+    return score;
+}
 
 #define BASE_SCORE_FOR_SEQUENCE 2
 
 int RawEntry::compare_with(RawEntry* entry) {
     int score = 0;
     string *str_a, *str_b;
+    strip_common_tokens(this, entry);
+    int entry_stripped_index = entry->get_token_index();
 
     //  1. FIND ONE BY ONE
-    this->init_token_index();
+    int init_score = 0;
     while ((str_a = this->get_next_token()) != NULL) {
-        entry->init_token_index();
+        entry->set_token_index(entry_stripped_index);
         while ((str_b = entry->get_next_token()) != NULL) {
-            if (str_a->compare(*str_b) == 0) {
-                score++;
+            if (str_a->compare(*str_b) == 0 && str_a->length() > 1) {
+                init_score += str_b->length() * 10;
             }
         }
     }
 
     //  2. MIND SEQUENCE
-    int order_score = BASE_SCORE_FOR_SEQUENCE;
-    this->init_token_index();
+    strip_common_tokens(this, entry);
+    int last_seq_a = 0;
+    int last_seq_b = 0;
+
+    int order_score = 0;
     while ((str_a = this->get_next_token()) != NULL) {
-        entry->init_token_index();
+        int order_match = 0;
+        entry->set_token_index(entry_stripped_index);
         while ((str_b = entry->get_next_token()) != NULL) {
             if (str_a->compare(*str_b) == 0) {
-                order_score *= BASE_SCORE_FOR_SEQUENCE;
-                score += order_score;
+                cout << " " << *str_a;
+                order_match++;
+                order_score += (order_match * str_a->length() * 100);
+                //  keep last token index which was sequentially same.
+                last_seq_a = this->get_token_index();
+                last_seq_b = entry->get_token_index();
                 str_a = this->get_next_token();
                 if (str_a == NULL) break;
             }
         }
     }
+
+    //  3. INDEPTH COMPARE
+    int depth_score = 0;
+    this->set_token_index(last_seq_a);
+    entry->set_token_index(last_seq_b);
+    while ((str_a = this->get_next_token()) != NULL) {
+        entry->set_token_index(last_seq_b);
+        while ((str_b = entry->get_next_token()) != NULL) {
+            depth_score += get_similar_score(str_a->c_str(), str_b->c_str());
+        }
+    }
+
+    score = init_score == 0 ? 0 : init_score + order_score + depth_score;
+
 #ifndef NO_DEBUG
     if (score > 0) {
         cout << " ... compare with " << entry->get_name() << endl;
         cout << "\t score = " << score;
-        if (order_score > BASE_SCORE_FOR_SEQUENCE)
-            cout << "(+" << order_score << ")";
+        cout << "( = " << init_score << " + " << order_score << " + " << depth_score << ")";
         cout << endl;
     }
 #endif
@@ -200,7 +257,7 @@ DirEntry* FileEntry::select_post(EntryManager* em) {
     }
     pair = NULL;
 #ifndef NO_DEBUG
-    cout << "Entry " << this->get_name()
+    cout << "\n Entry " << this->get_name()
          << " is selecting to post " << em->get_path() << endl;
 #endif
     DirEntry *entry = NULL, *best = NULL;
@@ -212,6 +269,9 @@ DirEntry* FileEntry::select_post(EntryManager* em) {
         if (score > score_board[top_index]) {
             top_index = index;
             best = entry;
+        } else if (score == score_board[top_index]) {
+            best = NULL;
+//            cout << " we have same score. ignore this score as best" << endl;
         }
         score_board[index++] = score;
     }
