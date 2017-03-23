@@ -1,29 +1,27 @@
-#include <stdlib>
 #include <sstream>
+#include <fstream>
+
+#include "TorAdoptor.hpp"
 
 #define LOAD_FROM_FILE 1
 
 using namespace std;
 
-enum STATUS {
-    Downloading
-    Stopped
-}
 
-TorItem::TorItem(int _id, int _progress, unsigned long long _size, float _eta, STATS _status, string _name)
-        : mId(_id), mProgress(_progress), mSize(_size), mETA(_eta), mStatus(_status) {
+TorItem::TorItem(int _id, int _progress, unsigned long long _size, STATUS _status, string _name)
+        : mId(_id), mProgress(_progress), mSize(_size), mStatus(_status) {
     mName = new string(_name);
 }
 
-string TorItem::string get_info() {
+string TorItem::get_info() {
     ostringstream* ost = new ostringstream();
-    ost << mId << ". " << nName << "/ size=" << mSize << "/ status=" << mStatus;
+    *ost << mId << ". " << mName << "/ size=" << mSize << "/ status=" << mStatus;
     return ost->str();        
 }
 
 
 TorAdaptor::TorAdaptor() {
-    this->mvTors = new vector<TorItem>();
+    this->mvTors = new vector<TorItem*>();
 }
 
 void TorAdaptor::print_tors() {
@@ -39,13 +37,13 @@ int get_char_to_int(char* buf) {
     return value;
 }
 
-TorItem* TorItem::parse_to_tor(string* _str) {
-    int length = _str->length();
+TorItem* TorItem::parse_to_tor(string& _str) {
+    int length = _str.length();
     TorItem* tor = new TorItem();
     int field_count = 0;
 
     for (int i = 0; i < length; i++) {
-        char* str = _str->c_str() + i;
+        const char* str = _str.c_str();
         if (*str != ' ') {
             continue;
         } else if (tor->mId == -1) {
@@ -59,17 +57,17 @@ TorItem* TorItem::parse_to_tor(string* _str) {
         } else if (tor->mSize == 0) {
             field_count = 3;
             tor->mSize = atof(str);
-            if (*(_str->c_str() + 21) == 'G'
-                && *(_str->c_str() + 23) == 'B') tor->mSize *= 1024* 1024* 1024;
+            if (*(_str.c_str() + 21) == 'G'
+                && *(_str.c_str() + 23) == 'B') tor->mSize *= 1024* 1024* 1024;
 
             i = 57;
         } else if (tor->mStatus == _INVALID) {
             if (strcmp((str + 1), "Stopped") == 0) {
-                mStatus = STATUS.Stopped;
+                tor->mStatus = Stopped;
             }
             i = 70;
         } else if (tor->mName == NULL) {
-            char* name = str+1;
+            const char* name = str + 1;
             tor->mName = new string(name);
         }
     }
@@ -93,7 +91,7 @@ int TorAdaptor::load_tors() {
         } else if (!startLoading) {
             continue;
         }
-        TorItem* tor = parse_to_tor(str);
+        TorItem* tor = TorItem::parse_to_tor(str);
         if (tor != NULL) {
             this->mvTors->push_back(tor);
             count_item++;
