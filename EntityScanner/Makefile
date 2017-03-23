@@ -1,22 +1,12 @@
 CC = g++
 CFLAG = -W -g
 TARGET = sortuper
+OBJECT = main.o RawEntry.o EntryManager.o TorAdoptor.o
 
-$(TARGET) : main.o RawEntry.o EntryManager.o
-	$(CC) $(CFLAG) -o $(TARGET) main.o RawEntry.o EntryManager.o
+all : $(TARGET)
 
-main.o : RawEntry.hpp main.cpp
-	$(CC) $(CFLAG) -c main.cpp
-
-RawEntry.o : RawEntry.hpp RawEntry.cpp
-	$(CC) $(CFLAG) -c RawEntry.cpp
-
-EntryManager.o : EntryManager.hpp EntryManager.cpp
-	$(CC) $(CFLAG) -c EntryManager.cpp
-
-TorAdoptor.o : TorAdoptor.hpp TorAdoptor.cpp
-	$(CC) $(CFLAG) -c TorAdoptor.cpp
-
+$(TARGET) : $(OBJECT)
+	$(CC) $(CFLAG) -o $@ $^
 
 clean :
 	rm *.o sortuper
