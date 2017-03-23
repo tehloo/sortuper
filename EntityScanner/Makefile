@@ -1,11 +1,22 @@
-sortuper: main.o RawEntry.o EntryManager.o
-	g++ -g -o sortuper main.o RawEntry.o EntryManager.o
+CC = g++
+CFLAG = -W -g
+TARGET = sortuper
+
+$(TARGET) : main.o RawEntry.o EntryManager.o
+	$(CC) $(CFLAG) -o $(TARGET) main.o RawEntry.o EntryManager.o
 
 main.o : RawEntry.hpp main.cpp
-	g++ -g -c main.cpp
+	$(CC) $(CFLAG) -c main.cpp
 
 RawEntry.o : RawEntry.hpp RawEntry.cpp
-	g++ -g -c RawEntry.cpp
+	$(CC) $(CFLAG) -c RawEntry.cpp
 
 EntryManager.o : EntryManager.hpp EntryManager.cpp
-	g++ -g -c EntryManager.cpp
+	$(CC) $(CFLAG) -c EntryManager.cpp
+
+TorAdoptor.o : TorAdoptor.hpp TorAdoptor.cpp
+	$(CC) $(CFLAG) -c TorAdoptor.cpp
+
+
+clean :
+	rm *.o sortuper
