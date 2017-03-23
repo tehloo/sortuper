@@ -1,6 +1,6 @@
+#include <iostream>
 #include <sstream>
 #include <fstream>
-
 #include "TorAdoptor.hpp"
 
 #define LOAD_FROM_FILE 1
@@ -25,6 +25,10 @@ TorAdaptor::TorAdaptor() {
 }
 
 void TorAdaptor::print_tors() {
+    for (vector<TorItem*>::iterator it = mvTors->begin();
+         it < mvTors->end(); it++) {
+        cout << "    " << (*it)->get_info() << endl;
+    }
 }
 
 int get_char_to_int(char* buf) {
@@ -43,7 +47,7 @@ TorItem* TorItem::parse_to_tor(string& _str) {
     int field_count = 0;
 
     for (int i = 0; i < length; i++) {
-        const char* str = _str.c_str();
+        const char* str = _str.c_str() + i;
         if (*str != ' ') {
             continue;
         } else if (tor->mId == -1) {
