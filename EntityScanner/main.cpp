@@ -13,20 +13,21 @@
 #include "RawEntry.hpp"
 #include "EntryManager.hpp"
 #include "TorAdoptor.hpp"
+#include "TorManager.hpp"
 
 using namespace std;
 
 bool get_paths(char** root_path, char** target_path);
-bool scan_dirs(const char *dir_path);
-bool find_files(const char *dir_path);
-bool find_entries(const char *dir_path, char *ext, int type);
 
 int main(int argc, const char * argv[]) {
+
+    TorManager* torMan = new TorManager();
+    torMan->run();
+   /*
     TorAdaptor* tor = new TorAdaptor();
     tor->load_tors();
     tor->print_tors();
     delete tor;
-   /* 
     // insert code here...
     cout << "\n\nHello, SORTUPER!\n\n";
     char* root_to_post = NULL;
