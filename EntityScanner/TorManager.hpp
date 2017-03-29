@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <map>
+#include "TorAdoptor.hpp"
 
 namespace CmdList {
     enum e_CMD {
@@ -18,8 +19,8 @@ static bool b_init_m_cmd = false;
 class TorManager {
 private:
     std::thread* mt_monitor;
+    TorAdaptor* tor;
 
-    static bool sb_run_thread;
     static void monitor_on_thread();
 
     void init_variables();
@@ -27,8 +28,11 @@ private:
     int cmd_receiver(char* cmd);
     void get_start_monitor();
     void stop_monitor();
+    void get_torAdaptor();
+    void show_tor_info();
 
 public:
+    static bool sb_run_thread;
     TorManager();
     void run();
 };

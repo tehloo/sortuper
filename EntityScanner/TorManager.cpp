@@ -3,8 +3,9 @@
 
 #include "TorManager.hpp"
 
-#define SLEEP_DURATION 1
-#define MAX_CMD_LENGTH 256
+#define SLEEP_DURATION  1
+#define MAX_CMD_LENGTH  256
+#define USE_THREAD      false
 
 TorManager::TorManager() {
     std::cout << std::endl << " initialing TorManager ...." << std::endl;
@@ -15,6 +16,7 @@ TorManager::TorManager() {
 bool TorManager::sb_run_thread = false;
 void TorManager::init_variables() {
     this->mt_monitor = NULL;
+    this->tor = NULL;
 }
 
 void TorManager::init_cmd() {
@@ -58,6 +60,7 @@ void cmd_to_lower(char* cmd) {
     }
 }
 
+#if USE_THREAD
 void TorManager::get_start_monitor() {
     if (this->mt_monitor != NULL || sb_run_thread) {
         std::cout << "get_start_monitor can not start thread" << std::endl;
@@ -83,6 +86,30 @@ void TorManager::monitor_on_thread() {
         sleep(SLEEP_DURATION);
     }
     std::cout << std::endl << "finishing monitor_on_thread..." << std::endl;
+}
+#else
+void TorManager::get_start_monitor() {
+    get_torAdaptor();
+    int updates = this->tor->load_tors();
+    std::cout << "get_start_monitor updates " << updates << " items" << endl;
+    this->tor->print_tors();
+}
+
+void TorManager::stop_monitor() {
+}
+#endif
+
+void TorManager::get_torAdaptor() {
+    if (this->tor == NULL) {
+        tor = new TorAdaptor();
+    }
+}
+
+void TorManager::show_tor_info() {
+    if (this->tor == NULL) {
+        return;
+    }
+    this->tor->print_tors();
 }
 
 int TorManager::cmd_receiver(char* cmd) {

@@ -13,6 +13,13 @@ TorItem::TorItem(int _id, int _progress, unsigned long long _size, int _status, 
     mName = new string(_name);
 }
 
+TorItem::TorItem(TorItem& _tor) : mId(_tor.mId),
+                             mProgress(_tor.mProgress),
+                             mSize(_tor.mSize),
+                             mStatus(_tor.mStatus) {
+    this->mName = new string(*(_tor.mName));
+}
+
 TorItem::~TorItem() {
     cout << "deleting " << *mName << endl;
     delete mName;
@@ -24,7 +31,7 @@ string TorItem::get_info() {
     return ost->str();        
 }
 
-bool TorItem::is_same(TorItem& tor) {
+bool TorItem::is_identical(TorItem& tor) {
     if (this->get_id() == tor.get_id()
         && this->get_name() != NULL
         && this->get_name()->compare(*(tor.get_name())) == 0) {
@@ -33,15 +40,26 @@ bool TorItem::is_same(TorItem& tor) {
     return false;
 }
 
+bool TorItem::is_same(TorItem& tor) {
+    if (is_identical(tor)
+        && this->mProgress == tor.mProgress
+        && this->mSize == tor.mSize
+        && this->mStatus == tor.mStatus)
+        return true;
+    return false;
+}
+
 bool TorItem::update(TorItem& tor) {
-    if (!this->is_same(tor))
+    if (!this->is_identical(tor))
         return false;
+
+    TorItem prev(*this);
 
     this->mProgress = tor.mProgress;
     this->mSize = tor.mSize;
     this->mStatus = tor.mStatus;
 
-    return true;
+    return !(this->is_same(prev));
 }
 
 
@@ -169,9 +187,8 @@ int TorAdaptor::update_to_list(TorItem* tor) {
 
     for (vector<TorItem*>::iterator it = mvTors->begin();
          it < mvTors->end(); it++) {
-        if ((*it)->is_same(*tor)) {
-            (*it)->update(*tor);
-            return -1;
+        if ((*it)->is_identical(*tor)) {
+            return (*it)->update(*tor) ? (*it)->get_id() : -1;
         }
     }
     mvTors->push_back(tor);

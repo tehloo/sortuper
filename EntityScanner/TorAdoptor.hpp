@@ -33,6 +33,7 @@ public:
     TorItem(int _id, int _progress,
             unsigned long long _size,
             int _status, string _name);
+    TorItem(TorItem& _tor);
     ~TorItem();
 
     string get_info();
@@ -41,6 +42,7 @@ public:
     
     static TorItem* parse_to_tor(string& _str);
     bool update(TorItem& tor);
+    bool is_identical(TorItem& tor);
     bool is_same(TorItem& tor);
 
 };
