@@ -92,7 +92,11 @@ void TorManager::get_start_monitor() {
     get_torAdaptor();
     int updates = this->tor->load_tors();
     std::cout << "get_start_monitor updates " << updates << " items" << endl;
-    this->tor->print_tors();
+//    this->tor->print_tors();
+
+//  find items for interest.
+    TorList(StateList::Stopped) tors;
+    this->tor->get_list_for_status(tors);
 }
 
 void TorManager::stop_monitor() {

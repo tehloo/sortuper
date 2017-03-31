@@ -194,3 +194,14 @@ int TorAdaptor::update_to_list(TorItem* tor) {
     mvTors->push_back(tor);
     return tor->get_id();
 }
+
+int TorAdoptor::get_list_for_status(TorList& tors) {
+    for (vector<TorItem*>::iterator it = mvTors->begin();
+         it < mvTors->end(); it++) {
+        if ((*it)->get_status() == tors.getStatus()) {
+            tors.push_back(**it);
+        }
+    }
+
+    return tors.size();
+}

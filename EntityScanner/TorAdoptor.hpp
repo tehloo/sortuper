@@ -39,6 +39,7 @@ public:
     string get_info();
     int get_id()        {   return mId;     };
     string* get_name()  {   return mName;   };
+    int get_status()    {   return mStatus; };
     
     static TorItem* parse_to_tor(string& _str);
     bool update(TorItem& tor);
@@ -46,6 +47,15 @@ public:
     bool is_same(TorItem& tor);
 
 };
+
+class TorList : public vector<TorItem> {
+private:
+    int m_requested_state;
+
+public:
+    TorList(int state) : m_requested_state(state);
+    int getStatus() {   return m_requested_state;   }
+}
 
 class TorAdaptor {
 private:
@@ -59,4 +69,5 @@ public:
     ~TorAdaptor();
     void print_tors();
     int load_tors();
+    int get_list_for_status(TorList& tors);
 };
